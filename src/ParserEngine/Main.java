@@ -18,11 +18,10 @@ public class Main {
             System.out.println(user.getID().number);
         }
 
-//        ArrayList<String> userPosts = Processor.countUserPosts(users,posts);
-
-//        for(String sentence: userPosts){
-//            System.out.println(sentence);
-//        }
+        ArrayList<String> userPosts = Processor.countUserPosts(users,posts);
+        for(String sentence: userPosts){
+            System.out.println(sentence);
+        }
 
         ArrayList<String> notUniquePostTitle = Processor.findNonUniqueTitles(posts);
         System.out.println("Size: " + notUniquePostTitle.size());
