@@ -1,5 +1,7 @@
 package ParserEngine;
 
+import ParserEngine.PostData.Post;
+import ParserEngine.UserData.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -7,9 +9,8 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 public class Parser {
     private static String readContent(Reader reader) throws IOException {
@@ -36,8 +37,8 @@ public class Parser {
         return array;
     }
 
-    public static ArrayList<User> parseUsers(String url){
-        ArrayList<User> usersAL = new ArrayList<>();
+    public static HashMap<UserID, User> parseUsers(String url){
+        HashMap<UserID,User> usersAL = new HashMap<>();
         JSONArray usersJSON = null;
 
         try {
@@ -64,7 +65,7 @@ public class Parser {
                     (String)userData.get("username"),(String)userData.get("email"), readAddress,
                     (String)userData.get("phone"),(String)userData.get("website"),readCompany);
 
-            usersAL.add(readUser);
+            usersAL.put(readUser.getID(),readUser);
         }
 
         return usersAL;

@@ -1,4 +1,4 @@
-package ParserEngine;
+package ParserEngine.PostData;
 
 public class Post {
     private int userId;
@@ -11,5 +11,9 @@ public class Post {
         this.id = id;
         this.title = title;
         this.body = body;
+    }
+
+    public int getUserId(){
+        return this.userId;
     }
 }

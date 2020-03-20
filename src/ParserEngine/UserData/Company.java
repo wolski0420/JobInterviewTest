@@ -1,4 +1,4 @@
-package ParserEngine;
+package ParserEngine.UserData;
 
 public class Company {
     private String name;
