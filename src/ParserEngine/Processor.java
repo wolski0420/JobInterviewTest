@@ -89,6 +89,11 @@ public class Processor {
             if(setOfTitles.containsKey(title) &&
                     !setOfTitles.get(title).equals(new BigInteger("1"))){
                 titlesToReturn.add(title);
+                // If I got next post with the same title, I would add it to returnList,
+                // but I don't want to have this title several times so that's why I had
+                // to write this line below - when I'm adding title, because counter > 1,
+                // I set this counter to 1 what implicates that condition from above isn't executed
+                setOfTitles.replace(title,new BigInteger("1"));
             }
         }
 

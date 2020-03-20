@@ -26,7 +26,9 @@ public class Parser {
     }
 
     /** it gives us array of objects from given URL in JSON format **/
-    private static JSONArray readJSONArrayFromURL(String url) throws IOException {
+    private static JSONArray readJSONArrayFromURL(String url) throws IOException, IllegalArgumentException {
+        if(url == null) throw new IllegalArgumentException("Given URL is null!");
+
         InputStream stream = new URL(url).openStream();
         InputStreamReader streamReader = new InputStreamReader(stream, Charset.forName("UTF-8"));
         BufferedReader reader = new BufferedReader(streamReader);
@@ -47,7 +49,7 @@ public class Parser {
         }
         catch(Exception e){
             System.out.println(e.toString());
-            System.exit(0);
+            System.exit(1);
         }
 
         // iterating on all users
@@ -95,7 +97,7 @@ public class Parser {
         }
         catch(Exception e){
             System.out.println(e.toString());
-            System.exit(0);
+            System.exit(1);
         }
 
         // iterating on all posts
