@@ -30,9 +30,12 @@ public class User {
         this.posts = new ArrayList<>();
     }
 
-    public void addPost(Post postToAdd){
-        this.postCounter++;
-        this.posts.add(postToAdd);
+    public void addPost(Post postToAdd) throws IllegalArgumentException{
+        if(postToAdd != null){
+            this.postCounter++;
+            this.posts.add(postToAdd);
+        }
+        else throw new IllegalArgumentException("Null is given to this method!");
     }
 
     public int getNumberOfPosts(){

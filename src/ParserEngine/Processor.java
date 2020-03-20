@@ -10,8 +10,14 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/** this class is created to process data **/
 public class Processor {
-    private static double countDistanceBetweenUsers(GeoLocation location1, GeoLocation location2){
+
+    /** this is haversine formula which calculate distance on spherical earth (it ignores ellipsoidal effects) **/
+    private static double countDistanceBetweenUsers(GeoLocation location1, GeoLocation location2) throws IllegalArgumentException{
+        if(location1 == null || location2 == null) throw new IllegalArgumentException("One of the given argument is null!");
+
+        // just preparing all required values
         double latitude1 = location1.getLat();
         double longitude1 = location1.getLng();
         double latitude2 = location2.getLat();
@@ -22,19 +28,35 @@ public class Processor {
         latitude2 = Math.toRadians(latitude2);
         double earthRadius = 6371;
 
+        // counting the value under square root
         double underRoot = Math.pow(Math.sin(diffLat/2),2) + Math.pow(Math.sin(diffLng/2),2) *
                 Math.cos(latitude1) * Math.cos(latitude2);
 
+        if(underRoot < 0) throw new IllegalArgumentException("Value under root cannot be negative!");
+
+        // returning right value
         return 2 * earthRadius * Math.asin(Math.sqrt(underRoot));
     }
 
-    public static ArrayList<String> countUserPosts(HashMap<UserID,User> users, ArrayList<Post> posts){
-        // exception for null
+    /** this method connect every post to author(user) by userID and count how many posts this specific user created **/
+    public static ArrayList<String> countUserPosts(HashMap<UserID,User> users, ArrayList<Post> posts) throws IllegalArgumentException{
+        if(users == null || posts == null) throw new IllegalArgumentException("One of the given argument is null!");
 
+        // getting posts and their authors
         for(Post post:posts){
-            users.get(new UserID(post.getUserId())).addPost(post);
+            User userToAddPost = users.get(new UserID(post.getUserId()));
+            if(userToAddPost != null){
+                try{
+                    userToAddPost.addPost(post);
+                }
+                catch(IllegalArgumentException e){
+                    System.out.println(e.toString());
+                    System.exit(0);
+                }
+            }
         }
 
+        // inserting information about authors and number of posts to array
         ArrayList<String> userPosts = new ArrayList<>();
         for(User user:users.values()){
             userPosts.add(user.getName() + " napisal(a) " + user.getNumberOfPosts() + " postow");
@@ -43,7 +65,11 @@ public class Processor {
         return userPosts;
     }
 
-    public static ArrayList<String> findNonUniqueTitles(ArrayList<Post> posts){
+    /** this method looks for non-unique titles of posts and returns them **/
+    public static ArrayList<String> findNonUniqueTitles(ArrayList<Post> posts) throws IllegalArgumentException{
+        if(posts == null) throw new IllegalArgumentException("Given argument is null!");
+
+        // getting titles of posts and counting number of them (hashmap has title as key and number of occurences as value)
         HashMap<String, BigInteger> setOfTitles = new HashMap<>();
         for(Post post: posts){
             String title = post.getTitle();
@@ -56,6 +82,7 @@ public class Processor {
             }
         }
 
+        // inserting to array only these posts which have non-unique titles (number of occurences > 1)
         ArrayList<String> titlesToReturn = new ArrayList<>();
         for(Post post: posts){
             String title = post.getTitle();
@@ -68,24 +95,38 @@ public class Processor {
         return titlesToReturn;
     }
 
+    /** this method looks for every user the closest user (the least distance) **/
     public static ArrayList<Pair<User,User>> findClosestUsers(HashMap<UserID,User> users){
+        if(users == null) throw new IllegalArgumentException("Given argument is null!");
+
         ArrayList<Pair<User,User>> closestUsersToReturn = new ArrayList<>();
 
+        // for every user...
         for(User user: users.values()){
             double minimumDistance = -1;
             User closestUser = null;
 
+            // find user
             for(User userSought: users.values()){
+                // who isn't himself/herself
                 if(!user.getID().equals(userSought.getID())){
-                    double distance = Processor.countDistanceBetweenUsers(
-                            user.getAddress().getGeo(),userSought.getAddress().getGeo());
-                    if((minimumDistance == -1 && closestUser == null) || distance <= minimumDistance){
-                        minimumDistance = distance;
-                        closestUser = userSought;
+                    try{
+                        // and has the least distance to current user
+                        double distance = Processor.countDistanceBetweenUsers(                  // can throw exception
+                                user.getAddress().getGeo(),userSought.getAddress().getGeo());
+                        if((minimumDistance == -1 && closestUser == null) || distance <= minimumDistance){
+                            minimumDistance = distance;
+                            closestUser = userSought;
+                        }
+                    }
+                    catch(IllegalArgumentException e){
+                        System.out.println(e.toString());
+                        System.exit(1);
                     }
                 }
             }
 
+            // second from the pair is the closest to the first one from the pair
             Pair<User,User> pairToAdd = new Pair<>(user,closestUser);
             closestUsersToReturn.add(pairToAdd);
         }
