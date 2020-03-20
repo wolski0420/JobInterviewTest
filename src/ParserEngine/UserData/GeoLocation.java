@@ -1,11 +1,19 @@
 package ParserEngine.UserData;
 
 public class GeoLocation {
-    private Double lat;
-    private Double lng;
+    private double lat;
+    private double lng;
 
-    public GeoLocation(Double lat, Double lng) {
+    public GeoLocation(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public double getLat(){
+        return this.lat;
+    }
+
+    public double getLng(){
+        return this.lng;
     }
 }

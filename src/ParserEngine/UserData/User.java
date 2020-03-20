@@ -46,4 +46,8 @@ public class User {
     public String getName(){
         return this.name;
     }
+
+    public Address getAddress(){
+        return this.address;
+    }
 }

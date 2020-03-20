@@ -14,4 +14,8 @@ public class Address {
         this.zipcode = zipcode;
         this.geo = geo;
     }
+
+    public GeoLocation getGeo(){
+        return this.geo;
+    }
 }
