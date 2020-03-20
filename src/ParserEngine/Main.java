@@ -17,8 +17,14 @@ public class Main {
         }
 
         ArrayList<String> userPosts = Processor.countUserPosts(users,posts);
+//
+//        for(String sentence: userPosts){
+//            System.out.println(sentence);
+//        }
 
-        for(String sentence: userPosts){
+        ArrayList<String> notUniquePostTitle = Processor.notUniquePostNames(posts);
+        System.out.println("Size: " + notUniquePostTitle.size());
+        for(String sentence: notUniquePostTitle){
             System.out.println(sentence);
         }
     }

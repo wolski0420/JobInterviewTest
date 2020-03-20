@@ -16,4 +16,8 @@ public class Post {
     public int getUserId(){
         return this.userId;
     }
+
+    public String getTitle(){
+        return this.title;
+    }
 }
